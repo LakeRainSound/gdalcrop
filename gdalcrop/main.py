@@ -1,12 +1,14 @@
 from pathlib import Path
 import time
 
+from gdalcrop.cli import command_parser
+
 from osgeo import gdal
 
 
-def gdalcrop(shp_file_name: str):
+def gdalcrop(tif_dir: str, shp_file_name: str, outdir: str):
     # オリジナルのデータがあるディレクトリ
-    origin_data_dir = Path("/app") / Path("image")
+    origin_data_dir = Path("/app") / Path(tif_dir)
     # .shpファイルの場所を指定する
     path_to_shp_file = Path("/app/shapefile") / Path(shp_file_name+".shp")
     # 実際に処理をしていく
@@ -16,7 +18,7 @@ def gdalcrop(shp_file_name: str):
             print(path_to_origin.name, "is not warped.")
             continue
         # 出力先のディレクトリを指定
-        outdir = Path("/app/cropped") / Path(shp_file_name)
+        outdir = Path("/app") / Path(outdir + '/' + shp_file_name)
         # 対応するshpファイルのディレクトリを作成
         outdir.mkdir(exist_ok=True, parents=True)
         # 出力先のファイルを指定
@@ -35,7 +37,8 @@ def gdalcrop(shp_file_name: str):
 
 
 def main():
-    gdalcrop("bari_cher")
+    tif_dir, shapefile, outdir = command_parser()
+    gdalcrop(tif_dir=tif_dir, shp_file_name=shapefile, outdir=outdir)
 
 
 # Press the green button in the gutter to run the script.

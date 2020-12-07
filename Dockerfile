@@ -14,3 +14,5 @@ COPY . ./
 
 # 自作ツールをインストール
 RUN pip install .
+
+ENTRYPOINT ["gdalcrop"]
